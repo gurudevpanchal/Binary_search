@@ -1,0 +1,232 @@
+/* c progam to implement linked list*/
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+ int info;
+ struct node* link;
+};
+ typedef struct node* NODE;
+
+NODE fncreatenode()
+{ NODE ptr;
+  ptr=(NODE)malloc(sizeof(struct node));
+  return ptr;
+}
+NODE fninsert_front_sll(NODE first,int ele)
+{
+ NODE temp=fncreatenode();
+ temp->info=ele;
+ temp->link=first;
+ return temp;
+}
+
+NODE fninsert_rear_sll(NODE first,int ele)
+{
+ NODE temp=fncreatenode();
+ temp->info=ele;
+ temp->link=NULL;
+ if(first==NULL)
+ {
+  return temp;
+ }
+ else
+ {
+  NODE cur=first;
+  while(cur->link!=NULL)
+  {
+    cur=cur->link;
+  }
+  //cur=cur->link;
+  cur->link=temp;
+  return first;
+ }
+}
+NODE fndelete_front_sll(NODE first)
+{
+  if(first==NULL)
+   {
+     printf("linked list empty,can't delete\n");
+     return NULL;
+   }
+  else if(first->link==NULL)
+  {
+   printf("deleted elt is %d\n",first->info);
+   free(first);
+   return NULL;
+  }
+
+  { NODE cur=first;
+    first=first->link;
+    printf("deleted elt is %d\n",cur->info);
+    free(cur);
+    return first;
+  }
+}
+NODE fndelete_rear_sll(NODE first)
+{
+  if(first==NULL)
+   {
+     printf("linked list empty,can't delete\n");
+     return NULL;
+   }
+  else if(first->link==NULL)
+  {
+   printf("deleted elt is %d\n",first->info);
+   free(first);
+   return NULL;
+  }
+  else
+  {NODE cur=first;
+   NODE prev=first;
+   while(cur->link!=NULL)
+   { prev=cur;
+     cur=cur->link;
+   }
+   printf("deleted elt is %d\n",cur->info);
+   prev->link=NULL;
+   free(cur);
+   return first;
+  }
+}
+void fndisplay_sll(NODE first)
+{ NODE cur=first;
+  if(first==NULL)
+  printf("linked list empty,cant display\n");
+  else
+  { while(cur!=NULL)
+     { printf("%d\n",cur->info);
+       cur=cur->link;
+     }
+  }
+}
+/* c function to delete a elememt at position */
+NODE fndelete_pos_sll(NODE first,int pos)
+{   int count=0,i;
+    NODE cur=first,prev=NULL;
+    while(cur!=NULL)
+    {
+        count++;
+        prev=cur;
+        cur=cur->link;
+    }
+    if(pos<=0||pos>count)
+    {
+        printf("illegal pos\n");
+        return first;
+    }
+    NODE demi=first;
+    if(pos==1)
+    {
+        first=first->link;
+        free(demi);
+        return first;
+    }
+    if(pos==count)
+    {
+             prev->link=NULL;
+             free(cur);
+             return first;
+   }
+    cur=first;prev=NULL;
+    for(i=1;i<pos;i++)
+    {
+        prev=cur;
+        cur=cur->link;
+
+    }
+    prev->link=cur->link;
+    free(cur);
+    return first;
+
+}
+/* c function to insert element in order in sll*/
+NODE fninsert_order(NODE first,int ele)
+{
+    NODE temp=fncreatenode();
+    temp->info=ele;
+    temp->link=NULL;
+    if(first==NULL)
+     return temp;
+    if(first->info > ele)
+    {
+        temp->link=first;
+        return temp;
+    }
+    NODE last=first;
+    while(last->link!=NULL)
+    {
+        last=last->link;
+    }
+    if(last->info < ele)
+    {
+        last->link=temp;
+        return first;
+    }
+    NODE prev=NULL;
+    NODE cur=first;
+    while(cur!=NULL)
+    {
+        if(cur->info > ele)
+            {
+                prev->link=temp;
+                temp->link=cur;
+                return first;
+            }
+            prev=cur;
+            cur=cur->link;
+    }
+   return first;
+}
+NODE fnreverse(NODE first)
+{
+   NODE reverse=NULL,cur=first,prev=NULL;
+   while(first!=NULL)
+   {  first=first->link;
+      cur->link=reverse;
+      reverse=cur;
+      cur=first;
+   }
+ return reverse;
+}
+
+main()
+{
+  NODE first=NULL;
+  int ele,pos;
+  int choice;
+  while(1)
+  { printf("Enter\n1-insert_front\n2-insert_rear\n3-delete_front\n4-delete_rear\n5-display\n6-delete_pos\n7-orderlist\n8-reverse\ndefault-exit\n");
+    scanf("%d",&choice);
+   switch(choice)
+   {case 1:printf("enter the element is to be inserted in sll from the front end\n");
+           scanf("%d",&ele);
+           first=fninsert_front_sll(first,ele);
+           break;
+    case 2:printf("enter the element is to be inserted in sll from the rear end\n");
+           scanf("%d",&ele);
+           first=fninsert_rear_sll(first,ele);
+           break;
+    case 3:first=fndelete_front_sll(first);
+           break;
+    case 4:first=fndelete_rear_sll(first);
+           break;
+    case 5:fndisplay_sll(first);
+           break;
+    case 6:printf("enter the pos to be dleted\n");
+           scanf("%d",&pos);
+           first=fndelete_pos_sll(first,pos);
+           break;
+    case 7:printf("enetr the element to be inserted in orderlist\n");
+           scanf("%d",&ele);
+           first=fninsert_order(first,ele);
+           break;
+    case 8:first=fnreverse(first);
+           break;
+    default:exit(0);
+   }
+ }
+}
+
+
+                                                                
